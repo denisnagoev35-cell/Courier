@@ -794,7 +794,7 @@ button.messenger-btn{ text-align:left; }
     var quizSuffix = (ddCity && ddTransport) ? ('__c' + ddCity + '__t' + ddTransport) : '';
     var lang = window.ddLang || 'ru';
     var langSuffix = (lang !== 'ru') ? ('__l' + lang) : '';
-    var suffix = quizSuffix + langSuffix;
+    var suffix = quizSuffix + langSuffix + (window.ddSrcSuffix || '');
     document.getElementById('ddLinkTg').href = 'https://t.me/delaideloyabot?start=landing_tg' + suffix;
     document.getElementById('ddLinkVk').href = 'https://vk.me/club241153883?ref=landing_vk' + suffix;
     // MAX: https://max.ru/<бот>?start=<метка> (до 128 символов) — метка приходит боту в bot_started.payload
@@ -804,6 +804,26 @@ button.messenger-btn{ text-align:left; }
   // чтобы диплинк на мессенджеры сразу нёс выбранный язык, даже если
   // квиз (город/транспорт) ещё не пройден.
   window.ddBuildLinks = ddBuildLinks;
+
+  // ── Источник: переход с job.24delaidelo.ru (utm_source=job_landing) ──
+  // Метка запоминается на 30 дней и добавляется в диплинк ботов как __sjob.
+  (function(){
+    var fromJob = /[?&]utm_source=job_landing/.test(location.search);
+    try {
+      if (fromJob) localStorage.setItem('dd_src', JSON.stringify({s:'job', t:Date.now()}));
+      else {
+        var v = JSON.parse(localStorage.getItem('dd_src') || 'null');
+        if (v && v.s === 'job' && Date.now() - v.t < 30*24*3600*1000) fromJob = true;
+      }
+    } catch(e){}
+    if (!fromJob) return;
+    window.ddSrcSuffix = '__sjob';
+    ddBuildLinks();
+    if (/[?&]utm_source=job_landing/.test(location.search)) {
+      ddVkEvent('from_job');
+      try { _tmr.push({type:'reachGoal', id:3790483, goal:'from_job'}); } catch(e){}
+    }
+  })();
 
   document.querySelectorAll('#ddStepCity [data-city]').forEach(function(btn){
     btn.addEventListener('click', function(){
