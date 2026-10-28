@@ -459,7 +459,17 @@ button.messenger-btn{ text-align:left; }
 .hero-grid>*,.bonus-grid>*,.steps-grid>*,.faq-grid>*{min-width:0}
 @media(max-width:560px){ .btn{white-space:normal;text-align:center;line-height:1.25} }
 
-  </style>
+  
+/* плашка cookie */
+.dd-cookie{position:fixed;left:12px;right:12px;bottom:12px;z-index:26;max-width:620px;margin:0 auto;
+  display:none;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:12px 14px;color:var(--soft);font-size:13px;line-height:1.4;box-shadow:0 12px 34px rgba(0,0,0,.55)}
+.dd-cookie.show{display:flex}
+.dd-cookie a{color:var(--accent);text-decoration:underline}
+.dd-cookie button{flex:none;background:var(--accent);color:#141208;border:0;border-radius:999px;padding:9px 16px;
+  font-family:'Geologica',sans-serif;font-weight:700;font-size:13px;cursor:pointer}
+@media(max-width:900px){ .dd-cookie{bottom:92px} }
+</style>
 </head>
 <body>
 <!-- Прелоадер (облегчённый): прячется, как только готов первый экран (0,6–1,2 с), прокрутку не блокирует -->
@@ -953,6 +963,8 @@ button.messenger-btn{ text-align:left; }
       chip5: "#любой транспорт",
       cta_start: "Начать оформление",
       sticky_cta: "Зарегистрироваться",
+      cookie_text: "Мы используем cookie и счётчики (Яндекс Метрика, VK Реклама) для аналитики и рекламы. Подробнее — в <a href=\"https://job.24delaidelo.ru/privacy.html\" target=\"_blank\" rel=\"noopener\">политике конфиденциальности</a>.",
+      cookie_ok: "Понятно",
       features_title: "Почему стоит попробовать",
       feat1_title: "Реальные деньги",
       feat1_text: "До 8000 ₽ в день — зависит от района и времени работы. Яндекс платит напрямую на карту раз в неделю.",
@@ -1042,6 +1054,8 @@ button.messenger-btn{ text-align:left; }
       chip5: "#istalgan_transport",
       cta_start: "Ro‘yxatdan o‘tishni boshlash",
       sticky_cta: "Ro‘yxatdan o‘tish",
+      cookie_text: "Sayt tahlil va reklama uchun cookie va hisoblagichlardan (Yandex Metrika, VK Reklama) foydalanadi. Batafsil — <a href=\"https://job.24delaidelo.ru/privacy.html\" target=\"_blank\" rel=\"noopener\">maxfiylik siyosatida</a>.",
+      cookie_ok: "Tushunarli",
       features_title: "Nega sinab ko‘rish kerak",
       feat1_title: "Haqiqiy pul",
       feat1_text: "Kuniga 8000 ₽gacha — tuman va ish vaqtiga qarab. Yandex haftasiga bir marta to‘g‘ridan-to‘g‘ri kartaga to‘laydi.",
@@ -1131,6 +1145,8 @@ button.messenger-btn{ text-align:left; }
       chip5: "#каалаган_транспорт",
       cta_start: "Каттоону баштоо",
       sticky_cta: "Катталуу",
+      cookie_text: "Сайт аналитика жана жарнама үчүн cookie жана эсептегичтерди (Яндекс Метрика, VK Реклама) колдонот. Кененирээк — <a href=\"https://job.24delaidelo.ru/privacy.html\" target=\"_blank\" rel=\"noopener\">купуялык саясатында</a>.",
+      cookie_ok: "Түшүнүктүү",
       features_title: "Эмне үчүн сынап көрүү керек",
       feat1_title: "Чыныгы акча",
       feat1_text: "Күнүнө 8000 ₽ге чейин — район жана иш убактысына жараша. Яндекс жумасына бир жолу түздөн-түз картага төлөйт.",
@@ -1220,6 +1236,8 @@ button.messenger-btn{ text-align:left; }
       chip5: "#ҳар_гуна_нақлиёт",
       cta_start: "Оғози бақайдгирӣ",
       sticky_cta: "Бақайд шудан",
+      cookie_text: "Сомона барои таҳлил ва реклама cookie ва ҳисобкунакҳоро (Яндекс Метрика, VK Реклама) истифода мебарад. Муфассал — дар <a href=\"https://job.24delaidelo.ru/privacy.html\" target=\"_blank\" rel=\"noopener\">сиёсати махфият</a>.",
+      cookie_ok: "Фаҳмо",
       features_title: "Чаро санҷидан лозим аст",
       feat1_title: "Пули воқеӣ",
       feat1_text: "То 8000 ₽ дар як рӯз — вобаста ба ноҳия ва вақти кор. Яндекс як маротиба дар ҳафта мустақим ба корт мепардозад.",
@@ -1374,5 +1392,19 @@ button.messenger-btn{ text-align:left; }
 })();
 </script>
 
+<div class="dd-cookie" id="ddCookie" role="region" aria-label="cookie">
+  <span data-i18n="cookie_text">Мы используем cookie и счётчики (Яндекс Метрика, VK Реклама) для аналитики и рекламы. Подробнее — в <a href="https://job.24delaidelo.ru/privacy.html" target="_blank" rel="noopener">политике конфиденциальности</a>.</span>
+  <button type="button" id="ddCookieOk" data-i18n="cookie_ok">Понятно</button>
+</div>
+<script>
+(function(){
+  var el=document.getElementById('ddCookie'); if(!el) return;
+  var ok=false; try{ ok=localStorage.getItem('dd_cookie_ok')==='1'; }catch(e){}
+  if(!ok) el.classList.add('show');
+  document.getElementById('ddCookieOk').addEventListener('click',function(){
+    el.classList.remove('show'); try{ localStorage.setItem('dd_cookie_ok','1'); }catch(e){}
+  });
+})();
+</script>
 </body>
 </html>
